@@ -232,3 +232,14 @@ describe("at", () => {
     });
   });
 });
+
+describe("reverse", () => {
+  it.each([
+    { items: [1, 2] },
+    { items: [1, 2, 3, 4] },
+    { items: [1, 2, 3, 4, 100, 2000, 0] },
+  ])(`reverses the list $items`, ({ items }) => {
+    const list = new LinkedList<number>(items);
+    expect(list.reverse().toArray()).toEqual(items.reverse());
+  });
+});

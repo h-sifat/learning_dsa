@@ -98,6 +98,29 @@ export class LinkedList<Type> implements SinglyLinkedList<Type> {
     return value;
   }
 
+  reverse(): LinkedList<Type> {
+    if (this.#size < 2) return this;
+
+    this.#last = this.#first;
+
+    let previousNode = this.#first;
+    let currentNode = this.#first!.next;
+
+    while (currentNode) {
+      const nextNode = currentNode.next;
+
+      currentNode.next = previousNode;
+
+      previousNode = currentNode;
+      currentNode = nextNode;
+    }
+
+    this.#first = previousNode;
+    this.#last!.next = null;
+
+    return this;
+  }
+
   deleteLast(): Type | null {
     if (!this.#first) return null;
     if (this.#size === 1) return this.#deleteTheOnlyItemInList();
