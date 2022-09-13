@@ -243,3 +243,33 @@ describe("reverse", () => {
     expect(list.reverse().toArray()).toEqual(items.reverse());
   });
 });
+
+describe("KthNodeFromTheEnd", () => {
+  it.each([
+    { k: 0, case: "not a positive integer" },
+    { k: -12, case: "not a positive integer" },
+    { k: 2.32, case: "not a positive integer" },
+  ])(`throws error if k ($k) is $case`, ({ k }) => {
+    expect(() => {
+      list.KthNodeFromTheEnd(k);
+    }).toThrow(Error);
+  });
+
+  it.each([
+    { items: [], k: 1, result: null },
+    { items: [2], k: 1, result: 2 },
+    { items: [1, 2], k: 3, result: null },
+    { items: [1, 2], k: 2, result: 1 },
+    { items: [1, 2, 3], k: 2, result: 2 },
+    { items: [1, 2, 3, 4, 5], k: 4, result: 2 },
+    { items: [1, 2, 3, 4, 5], k: 5, result: 1 },
+  ])(
+    `k: $k-th node from the end in list: $items should be: $result`,
+    ({ items, k, result }) => {
+      const list = new LinkedList<number>(items);
+
+      const KthNode = list.KthNodeFromTheEnd(k);
+      expect(KthNode).toEqual(result);
+    }
+  );
+});

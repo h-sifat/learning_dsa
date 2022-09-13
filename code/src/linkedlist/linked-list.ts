@@ -143,6 +143,33 @@ export class LinkedList<Type> implements SinglyLinkedList<Type> {
     return value;
   }
 
+  KthNodeFromTheEnd(k: number): Type | null {
+    if (!Number.isInteger(k) || k < 1)
+      throw new Error(`K must be of type positive integer`);
+
+    if (!this.#first) return null;
+    if (k === 1) return this.#last!.value;
+
+    let distanceBetweenHeadAndTailPointer = k - 1;
+
+    let tailPointer = this.#first;
+    let headPointer = this.#first;
+
+    while (distanceBetweenHeadAndTailPointer > 0) {
+      if (headPointer?.next) headPointer = headPointer.next;
+      else return null;
+
+      distanceBetweenHeadAndTailPointer--;
+    }
+
+    while (headPointer.next) {
+      headPointer = headPointer.next;
+      tailPointer = tailPointer.next!;
+    }
+
+    return tailPointer.value;
+  }
+
   indexOf(value: Type) {
     let index = -1;
 
