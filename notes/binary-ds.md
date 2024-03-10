@@ -45,9 +45,9 @@ Tree traversal algorithms are separated into two categories.
 1. **Breadth first (level order):** We visit all the nodes in the current level
    before moving to the next level.
 1. **Depth first**
-    1. Pre-order: **Root,** Left, Right
-    1. In-order: Left, **Root,** Right
-    1. Post-order: Left, Right **Root,** (we visit from the leaves to upward).
+   1. Pre-order: **Root,** Left, Right
+   1. In-order: Left, **Root,** Right
+   1. Post-order: Left, Right **Root,** (we visit from the leaves to upward).
 
 **Tip:** If we do an **in-order (left,root,right)** traversal of a binary search
 tree then we'll visit all the nodes in ascending order. And if we reverse the
@@ -57,17 +57,15 @@ order (right, root, left) we get the nodes in descending order.
 
 1. **Depth:** The number of edges from the root node.
 1. **Height:** Is the opposite of Depth. The height of a leaf node is **zero.** To
-  calculate the height of a node, we need to find the longest path from that node
-  to a leaf.The formula to calculate the height of a node use recursion: `1 + max(height(leftNode), height(rightNode))`
+   calculate the height of a node, we need to find the longest path from that node
+   to a leaf.The formula to calculate the height of a node using recursion: `1 + max(height(leftNode), height(rightNode))`
 
 ```
- height            8          
-   ^              / \         
-|  |             4   9        
-|  |            / \           
-V              2   3          
-depth         /               
+ height            8
+   ^              / \
+|  |             4   9
+|  |            / \
+V              2   3
+depth         /
              1   <-- h: 0, d: 3
 ```
-
-

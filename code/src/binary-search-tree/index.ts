@@ -10,4 +10,5 @@ treeA.insertMany([7, 4, 9, 1, 6, 8, 10]);
  *            1   6 8  10
  * */
 
-treeA.visitNodesAtDepth({ depth: 0, visit: console.log });
+// treeA.visitNodesAtDepth({ depth: 2, visit: console.log });
+treeA.traverseLevelOrder();

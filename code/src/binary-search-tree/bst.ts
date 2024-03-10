@@ -55,7 +55,7 @@ export class BST<T extends number> {
   }
 
   traversePreOrder(visit: VisitCallback<T>) {
-    this.#traversePreOrder({
+    this.#traverse({
       visit,
       node: this.#root,
       order: ["root", "left", "right"],
@@ -63,7 +63,7 @@ export class BST<T extends number> {
   }
 
   traverseInOrder(visit: VisitCallback<T>) {
-    this.#traversePreOrder({
+    this.#traverse({
       visit,
       node: this.#root,
       order: ["left", "root", "right"],
@@ -71,14 +71,14 @@ export class BST<T extends number> {
   }
 
   traversePostOrder(visit: VisitCallback<T>) {
-    this.#traversePreOrder({
+    this.#traverse({
       visit,
       node: this.#root,
       order: ["left", "right", "root"],
     });
   }
 
-  #traversePreOrder(arg: {
+  #traverse(arg: {
     node: Node<T> | null;
     visit: VisitCallback<T>;
     order: TraverseOrder;
@@ -90,7 +90,7 @@ export class BST<T extends number> {
     for (const nodeName of arg.order)
       if (nodeName === "root") visit(node.value);
       else
-        this.#traversePreOrder({
+        this.#traverse({
           visit,
           order: arg.order,
           node: node[nodeName],
@@ -132,11 +132,11 @@ export class BST<T extends number> {
   }
 
   isBST() {
-    return this.#isBST({ node: this.#root, min: -Infinity, max: Infinity });
+    return this.#isBST({ node: this.#root });
   }
 
-  #isBST(arg: { node: Node<T> | null; min: number; max: number }): boolean {
-    const { node, min, max } = arg;
+  #isBST(arg: { node: Node<T> | null; min?: number; max?: number }): boolean {
+    const { node, min = -Infinity, max = Infinity } = arg;
 
     if (!node) return true;
 
@@ -173,6 +173,11 @@ export class BST<T extends number> {
       node: node.right,
       distance: distance - 1,
     });
+  }
+
+  traverseLevelOrder(visit: VisitCallback<T> = console.log) {
+    for (let i = 0; i <= this.height(); i++)
+      this.visitNodesAtDepth({ depth: i, visit });
   }
 
   isEmpty() {
