@@ -13,5 +13,8 @@
   "devDependencies": {
     "@types/jest": "^28.1.7",
     "ts-jest": "^28.0.8"
+  },
+  "dependencies": {
+    "flexible-tree-printer": "^1.0.3"
   }
 }
