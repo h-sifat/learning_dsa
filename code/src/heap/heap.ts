@@ -7,7 +7,6 @@ const getLeftIdx = (parent: number) => parent * 2 + 1;
 const getRightIdx = (parent: number) => parent * 2 + 2;
 
 export class Heap<T extends string | number> {
-  // @ts-ignore
   #items: T[] = [];
   #size = 0;
 
@@ -16,6 +15,63 @@ export class Heap<T extends string | number> {
     this.#items[index] = value;
 
     this.#bubbleUp(index);
+  }
+
+  isEmpty() {
+    return !this.#size;
+  }
+
+  // TODO: fix the remove method
+  remove() {
+    if (this.isEmpty()) return;
+
+    this.#items[0] = this.#items[--this.#size];
+
+    let index = 0;
+
+    while (index <= this.#size && !this.#isParentValid(index)) {
+      const childIdx = this.#largerChildIdx(index);
+      this.#swap(index, childIdx);
+      index = childIdx;
+    }
+  }
+
+  #largerChildIdx(index: number) {
+    if (!this.#hasLeftChild(index)) return index;
+    if (!this.#hasRightChild(index)) return getLeftIdx(index);
+
+    const left = this.#leftChild(index);
+    const right = this.#rightChild(index);
+
+    return left > right ? getLeftIdx(index) : getRightIdx(index);
+  }
+
+  #isParentValid(index: number) {
+    if (!this.#hasLeftChild(index)) return true;
+
+    const parent = this.#items[index];
+    let isValid = parent >= this.#leftChild(index);
+
+    if (this.#hasRightChild(index))
+      isValid &&= parent <= this.#rightChild(index);
+
+    return isValid;
+  }
+
+  #hasLeftChild(index: number) {
+    return getLeftIdx(index) <= this.#size;
+  }
+
+  #hasRightChild(index: number) {
+    return getRightIdx(index) <= this.#size;
+  }
+
+  #leftChild(parentIdx: number) {
+    return this.#items[getLeftIdx(parentIdx)];
+  }
+
+  #rightChild(parentIdx: number) {
+    return this.#items[getRightIdx(parentIdx)];
   }
 
   #bubbleUp(index: number) {
@@ -40,8 +96,10 @@ export class Heap<T extends string | number> {
   }
 
   print() {
+    console.log("root:", this.#items);
+
     if (!this.#items.length) return console.log("<empty>");
-    const items = this.#items;
+    const items = this.#items.slice(0, this.#size);
 
     type NodeType<T> = { value: T; index: number; type?: "left" | "right" };
 
@@ -52,9 +110,6 @@ export class Heap<T extends string | number> {
       getSubNodes({ parentNode }) {
         const { index } = parentNode!;
         const subNodes: ReturnType<GetSubNodes<NodeType<T>>> = [];
-
-        const leftIdx = getLeftIdx(index);
-        const rightIdx = getRightIdx(index);
 
         (
           [
@@ -79,5 +134,9 @@ export class Heap<T extends string | number> {
 
 const heap = new Heap<number>();
 heap.insertMany([1, 2, 3, 4, 6, 7, 8]);
+heap.print();
+
+console.log("--remove--");
+heap.remove();
 
 heap.print();
