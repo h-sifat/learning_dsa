@@ -25,15 +25,21 @@ export class Heap<T extends string | number> {
   remove() {
     if (this.isEmpty()) return;
 
+    const removedItem = this.#items[0];
+
     this.#items[0] = this.#items[--this.#size];
 
     let index = 0;
 
-    while (index <= this.#size && !this.#isParentValid(index)) {
+    while (index < this.#size && !this.#isParentValid(index)) {
       const childIdx = this.#largerChildIdx(index);
       this.#swap(index, childIdx);
       index = childIdx;
     }
+
+    // keep the removed item at the end. This will sort the array
+    this.#items[this.#size] = removedItem;
+    return removedItem;
   }
 
   #largerChildIdx(index: number) {
@@ -53,7 +59,7 @@ export class Heap<T extends string | number> {
     let isValid = parent >= this.#leftChild(index);
 
     if (this.#hasRightChild(index))
-      isValid &&= parent <= this.#rightChild(index);
+      isValid &&= parent >= this.#rightChild(index);
 
     return isValid;
   }
@@ -96,7 +102,7 @@ export class Heap<T extends string | number> {
   }
 
   print() {
-    console.log("root:", this.#items);
+    // console.log("root:", this.#items);
 
     if (!this.#items.length) return console.log("<empty>");
     const items = this.#items.slice(0, this.#size);
@@ -130,13 +136,25 @@ export class Heap<T extends string | number> {
       },
     });
   }
+
+  get size() {
+    return this.#size;
+  }
+
+  get internal_array() {
+    return [...this.#items];
+  }
 }
 
 const heap = new Heap<number>();
-heap.insertMany([1, 2, 3, 4, 6, 7, 8]);
+heap.insertMany([1, 2, 3, 4, 6, 12, 7, 8]);
+
+console.log("initial heap:");
 heap.print();
 
-console.log("--remove--");
-heap.remove();
+while (heap.size) {
+  console.log("--remove--", heap.remove());
+  heap.print();
+}
 
-heap.print();
+console.log("internal array: ", heap.internal_array);
